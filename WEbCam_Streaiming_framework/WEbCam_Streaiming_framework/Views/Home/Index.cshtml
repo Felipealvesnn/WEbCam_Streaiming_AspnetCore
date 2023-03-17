@@ -16,10 +16,9 @@ Teste
 
         connection.logging = true;
 
-        connection.
-            low(function () {
-                writeEvent("connectionSlow");
-            });
+        connection.connectionSlow(function () {
+            writeEvent("connectionSlow");
+        });
 
 
     </script>
