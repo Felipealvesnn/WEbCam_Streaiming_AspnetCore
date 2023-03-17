@@ -10,19 +10,17 @@ Teste
     <script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
     <script>
 
-        var hubUrl = document.location.origin + '/cnnctn';
-        var hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl(hubUrl, signalR.HttpTransportType.WebSockets)
-            .configureLogging(signalR.LogLevel.None)
-            .build();
+        var connection = $.connection.hub,
+            hub = $.connection.MyHub;
 
 
-        hubConnection.start().then(() => {
-            user = generateId();
-            //userJoin(user);
-            //console.info(`Connected as ${user}`);
+        connection.logging = true;
 
-        }).catch(err => console.error(err));
+        connection.
+            low(function () {
+                writeEvent("connectionSlow");
+            });
+
 
     </script>
     
