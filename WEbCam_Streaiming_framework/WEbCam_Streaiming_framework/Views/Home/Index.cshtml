@@ -11,9 +11,9 @@ Teste
     <script src="~/signalr/hubs"></script>
     <script>
 
-        var connection = $.connection.hub,
-            hub = $.connection.MyHub;
-
+        var connection = $.connection.hub;
+    
+        var chathub = $.connection.myHub;
 
         connection.logging = true;
 
