@@ -9,17 +9,26 @@ Teste
 {
     <script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
     <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/JsView/Site.js"></script>
     <script>
 
         var connection = $.connection.hub;
-    
-        var chathub = $.connection.myHub;
+        $.support.cors = true;
+     /*   $.connection.hub.url = '~/signalr/hubs';*/
+      
+        var chathub = $.connection.MyHub;
 
         connection.logging = true;
 
-        connection.connectionSlow(function () {
-            writeEvent("connectionSlow");
-        });
+
+        var activeTransport = getQueryVariable("transport") || "auto";
+
+        connection.start({ transport: activeTransport })
+            .done(function () {
+                console.log("connection started. Id=" + connection.id + ". Transport=" + connection.transport.name);
+                chathub.server.Join("Testes")
+
+            })
 
 
     </script>

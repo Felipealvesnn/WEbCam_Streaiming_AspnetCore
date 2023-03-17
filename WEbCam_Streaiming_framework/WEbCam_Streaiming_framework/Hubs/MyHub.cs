@@ -8,9 +8,11 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Threading;
 using WEbCam_Streaiming_framework.Hubs.ModelsHub;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace WEbCam_Streaiming_framework.Hubs
 {
+    [HubName("MyHub")]
     public class MyHub:  Hub<IConnectionHub>
     {
         private readonly List<User> _users;
@@ -23,6 +25,7 @@ namespace WEbCam_Streaiming_framework.Hubs
             _connections = connections;
             _calls = calls;
         }
+        [HubMethodName("Join")]
         public async Task Join(string username)
         {
             _users.Add(new User
@@ -33,6 +36,14 @@ namespace WEbCam_Streaiming_framework.Hubs
 
             await UpdateOnlineUsers();
         }
+
+        public void Send(string name, string message)
+        {
+          var user =   _users.Where(u => u.ConnectionId == Context.ConnectionId).ToList();
+            // Call the broadcastMessage method to update clients.
+            Clients.All.AttUsuariosOnline(user);
+        }
+      
 
 
         public override async Task OnDisconnected(bool stopCalled)
@@ -48,6 +59,7 @@ namespace WEbCam_Streaiming_framework.Hubs
 
         public async Task Call(User targetConnectionId)
         {
+            
             var callingUser = _users.SingleOrDefault(u => u.ConnectionId == Context.ConnectionId);
             var targetUser = _users.SingleOrDefault(u => u.ConnectionId == targetConnectionId.ConnectionId);
 
